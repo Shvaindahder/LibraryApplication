@@ -1,0 +1,67 @@
+{% extends 'bootstrap/base.html' %}
+
+{% block title %}
+    Library -
+    {% if title %}
+        {{ title }}
+    {% else %}
+        Home
+    {% endif %}
+{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {{ super() }}
+{% endblock %}
+
+{% block navbar %}
+<nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <a href="#">
+                <img src="{{ url_for('static', filename='images/Open Book-595b40b65ba036ed117d44fc.svg') }}" alt="logo" height="50px">
+            </a>
+        </div>
+        {% if current_user.is_authenticated %}
+        <div class="navbar-right">
+            <a href="{{ url_for('auth.logout') }}">
+                <button type="button" class="btn btn-default" style="margin-top: 8px">Выйти</button>
+            </a>
+        </div>
+        {% else %}
+        <div class="navbar-right">
+            <button type="button" class="btn btn-default" style="margin-top: 8px">
+                <a href="{{ url_for('auth.login')}}">
+                    Войти
+                </a>
+            </button>
+            <button type="button" class="btn btn-default" style="margin-top: 8px">
+                <a href="{{ url_for('auth.register') }}">
+                    Зарегистрироваться
+                </a>
+            </button>
+        </div>
+        {% endif %}
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-info" role="alert">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+        {% block page_headline %}
+        {% if headline %}
+            <div class="headline_text {% if col_md_pos %}col-md-offset-{{col_md_pos}}{% endif %}">
+                <h1>{{ headline }}</h1>
+            </div>
+        {% endif %}
+        {% endblock %}
+        {% block app_content %}{% endblock %}
+    </div>
+{% endblock %}
